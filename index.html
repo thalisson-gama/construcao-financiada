@@ -1748,8 +1748,7 @@
       document.getElementById(errId).classList.remove('show');
     }
 
-    // TROCAR: cole aqui a URL do seu webhook (Make.com, n8n, Zapier, etc.)
-    const WEBHOOK_URL = 'https://SEU_WEBHOOK_AQUI';
+    const WEBHOOK_URL = 'https://nlvjlgjztngiixcpumfe.supabase.co/functions/v1/lp-lead-webhook?token=a3a91cd8-580a-4a1b-b8f3-9f56067f0922';
 
     function submitForm() {
       if (!validateStep2()) return;
@@ -1780,11 +1779,11 @@
         if (!res.ok) throw new Error('Erro no envio');
         showSuccess();
       })
-      .catch(() => {
-        // Mesmo com erro no webhook, mostra sucesso para não travar o lead
-        // Os dados podem ser recuperados via fallback (ex: UTM, localStorage)
-        console.warn('Webhook falhou — exibindo sucesso mesmo assim.');
-        showSuccess();
+      .catch((err) => {
+        console.error('Erro ao enviar lead:', err);
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        alert('Não foi possível enviar agora. Por favor, tente novamente em alguns instantes ou entre em contato pelo WhatsApp.');
       });
 
       function showSuccess() {
